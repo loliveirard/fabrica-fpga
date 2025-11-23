@@ -22,7 +22,11 @@ begin
             "1111000" when "0111", -- 7
             "0000000" when "1000", -- 8
             "0010000" when "1001", -- 9
-            "1111010" when "1010", -- r  (g e)
-            "0001100" when "1011", -- p  (a b e f g)
-            "1111111" when others; -- tudo apagado
+            "1100000" when "1010", -- B
+            "1000001" when "1011", -- V
+            "1000110" when "1100", -- C
+            "0011000" when "1101", -- Q
+            "1110001" when "1110", -- L
+            "0001100" when "1111", -- P
+            "1111111" when others; -- apagado
 end bcd_architecture;
