@@ -20,7 +20,7 @@ architecture push_button_architecture of push_button is
 		reg_2 <= reg_1;
 		else
 		end if;
-		Saida <= (reg_1 XNOR '1') and (reg_2 XNOR '0') ;
+		Saida <= '1' and(reg_1 xor reg_2);
 	end process;
 
 end architecture push_button_architecture;

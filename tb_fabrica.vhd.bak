@@ -12,12 +12,8 @@ architecture sim of tb_fabrica is
     signal clk_tb         : std_logic := '0';
     signal btn_edge_tb    : std_logic := '0';
     signal switches_tb    : std_logic_vector(6 downto 0) := (others => '0');
-	 --signal E1_reg_tb, E2_reg_tb, E3_reg_tb, E4_reg_tb, E5_reg_tb, E6_reg_tb : std_logic_vector(3 downto 0) := (others => '0');
+	 -- signal E1_reg_tb, E2_reg_tb, E3_reg_tb, E4_reg_tb, E5_reg_tb, E6_reg_tb : std_logic_vector(3 downto 0) := (others => '0');
 	 signal bcd1_tb, bcd2_tb, bcd3_tb, bcd4_tb, bcd5_tb, bcd6_tb : std_logic_vector(6 downto 0) := (others => '0');
-	 --signal B_reg_tb, C_reg_tb, Q_reg_tb :  std_logic_vector(3 downto 0):= (others => '0');
-	 --signal L_reg_tb, P_reg_tb :  std_logic_vector(5 downto 0):= (others => '0');
-	 --signal V_reg_tb : std_logic_vector(6 downto 0):= (others => '0');
-	 signal reset_n_tb :std_logic := '0';
     -- Clock period
     constant CLK_PERIOD : time := 20 ns;
 
@@ -27,22 +23,15 @@ begin
     --------------------------------------------------------------------
     dut : entity work.fabrica
         port map (
-            clk50         => clk_tb,
+            clk         => clk_tb,
             btn_edge    => btn_edge_tb,
-				reset_n_fab => reset_n_tb,
             switches_in => switches_tb,
-				--E1_reg 		=> E1_reg_tb,
-				--E2_reg 		=> E2_reg_tb,
-				--E3_reg 		=> E3_reg_tb,
-				--E4_reg 		=> E4_reg_tb,
-				--E5_reg 		=> E5_reg_tb,
-				--E6_reg 		=> E6_reg_tb,
-				--B_reg 		=> B_reg_tb,
-				--V_reg 		=> V_reg_tb,
-				--C_reg 		=> C_reg_tb,
-				--Q_reg 		=> Q_reg_tb,
-				--P_reg 		=> P_reg_tb,
-				--L_reg 		=> L_reg_tb,
+				-- E1_reg 		=> E1_reg_tb,
+				-- E2_reg 		=> E2_reg_tb,
+				-- E3_reg 		=> E3_reg_tb,
+				-- E4_reg 		=> E4_reg_tb,
+				-- E5_reg 		=> E5_reg_tb,
+				-- E6_reg 		=> E6_reg_tb,
 				bcd1 => bcd1_tb,
 				bcd2 => bcd2_tb,
 				bcd3 => bcd3_tb,
@@ -59,9 +48,9 @@ begin
 	 
     begin
         clk_tb <= '0';
-        wait for 2000 ms;
+        wait for CLK_PERIOD/2;
         clk_tb <= '1';
-        wait for 2000 ms;
+        wait for CLK_PERIOD/2;
     end process;
 
     --------------------------------------------------------------------
@@ -69,11 +58,12 @@ begin
     --------------------------------------------------------------------
 
 	 bot_process : process
+	 
     begin
-		  btn_edge_tb <= '0';
-        wait for CLK_PERIOD/3;
 		  btn_edge_tb <= '1';
-        wait for CLK_PERIOD/3;
+        wait for CLK_PERIOD/5;
+		  btn_edge_tb <= not btn_edge_tb;
+        wait for CLK_PERIOD/5;
     end process;
 	 
     --------------------------------------------------------------------
@@ -84,22 +74,11 @@ begin
         -- Exemplo: definir switches para um valor útil
         -- switches_tb(3 downto 0) = BCD
         -- switches_tb(6 downto 4) = outras entradas para o datapath
-        switches_tb <= "1111111";
+        switches_tb <= "1111111";  -- altere conforme necessário
 
---        wait for 40 ns;
---        switches_tb <= "0000110";
---		  
---		  wait for 20 ns;
---        switches_tb <= "0001110";
---		  
---		  wait for 20 ns;
---        switches_tb <= "0010000";
---		  
---		  wait for 20 ns;
---        switches_tb <= "0001010";
---		  
---		  wait for 20 ns;
---        switches_tb <= "0011101";
+        wait for 50 ns;
+
+        switches_tb <= "1111111";
 
         wait;
     end process;

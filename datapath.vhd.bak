@@ -40,7 +40,7 @@ architecture rtl of datapath is
     signal B_mux_out, Q_mux_out, C_mux_out : std_logic_vector(3 downto 0);
     signal P_mux_out, L_mux_out : std_logic_vector(5 downto 0);
     signal V_mux_out : std_logic_vector(6 downto 0);
-    --signal   E3_mux_out, E4_mux_out, E5_mux_out, E6_mux_out : std_logic_vector(3 downto 0); --E1_mux_out, E2_mux_out,
+    signal E1_mux_out, E2_mux_out, E3_mux_out, E4_mux_out, E5_mux_out, E6_mux_out : std_logic_vector(3 downto 0);
 
     signal B_sub_s, Q_sub_s, C_sub_s : std_logic_vector(4 downto 0);
     signal P_sub_s, L_sub_s : std_logic_vector(6 downto 0);
@@ -51,8 +51,8 @@ architecture rtl of datapath is
     signal B_minus1, Q_minus1, C_minus1 : std_logic_vector(3 downto 0);
     signal P_minus1, L_minus1 : std_logic_vector(5 downto 0);
     signal V_minus1 : std_logic_vector(6 downto 0);
-    --signal  E3_minus1, E4_minus1, E5_minus1, E6_minus1 : std_logic_vector(3 downto 0); --E1_minus1, E2_minus1,
-    --signal   E3_plus1, E4_plus1, E5_plus1, E6_plus1 : std_logic_vector(3 downto 0); --E1_plus1, E2_plus1,
+    signal E1_minus1, E2_minus1, E3_minus1, E4_minus1, E5_minus1, E6_minus1 : std_logic_vector(3 downto 0);
+    signal E1_plus1, E2_plus1, E3_plus1, E4_plus1, E5_plus1, E6_plus1 : std_logic_vector(3 downto 0);
 
     component reg_w is
         generic ( W : natural := 4 );
@@ -90,8 +90,8 @@ architecture rtl of datapath is
 
 begin
     sw_V <= switches_in;
-    sw_P <= switches_in(5 downto 0);
-    sw_L <= switches_in(5 downto 0);
+    sw_P <= '0' & switches_in(4 downto 0);
+    sw_L <= '0' & switches_in(4 downto 0);
     sw_B <= switches_in(3 downto 0);
     sw_Q <= switches_in(3 downto 0);
     sw_C <= switches_in(3 downto 0);
@@ -103,26 +103,19 @@ begin
     U_L_SUB : addsub_w generic map (w => 6) port map (A => L_reg_vec, B => "000100", SUB => '1', S => L_sub_s);
     U_V_SUB : addsub_w generic map (w => 7) port map (A => V_reg_vec, B => "0001000", SUB => '1', S => V_sub_s);
 
-    --U_E1_ADD : addsub_w generic map (w => 4) port map (A => E1_vec, B => "0001", SUB => '0', S => E1_add_s);
-    --U_E1_SUB : addsub_w generic map (w => 4) port map (A => E1_vec, B => "0001", SUB => '1', S => E1_sub_s);
-    --U_E2_ADD : addsub_w generic map (w => 4) port map (A => E2_vec, B => "0001", SUB => '0', S => E2_add_s);
-    --U_E2_SUB : addsub_w generic map (w => 4) port map (A => E2_vec, B => "0001", SUB => '1', S => E2_sub_s);
---    U_E3_ADD : addsub_w generic map (w => 4) port map (A => E3_vec, B => "0001", SUB => '0', S => E3_add_s);
---    U_E3_SUB : addsub_w generic map (w => 4) port map (A => E3_vec, B => "0001", SUB => '1', S => E3_sub_s);
---    U_E4_ADD : addsub_w generic map (w => 4) port map (A => E4_vec, B => "0001", SUB => '0', S => E4_add_s);
---    U_E4_SUB : addsub_w generic map (w => 4) port map (A => E4_vec, B => "0001", SUB => '1', S => E4_sub_s);
---    U_E5_ADD : addsub_w generic map (w => 4) port map (A => E5_vec, B => "0001", SUB => '0', S => E5_add_s);
---    U_E5_SUB : addsub_w generic map (w => 4) port map (A => E5_vec, B => "0001", SUB => '1', S => E5_sub_s);
---    U_E6_ADD : addsub_w generic map (w => 4) port map (A => E6_vec, B => "0001", SUB => '0', S => E6_add_s);
---    U_E6_SUB : addsub_w generic map (w => 4) port map (A => E6_vec, B => "0001", SUB => '1', S => E6_sub_s);
+    U_E1_ADD : addsub_w generic map (w => 4) port map (A => E1_vec, B => "0001", SUB => '0', S => E1_add_s);
+    U_E1_SUB : addsub_w generic map (w => 4) port map (A => E1_vec, B => "0001", SUB => '1', S => E1_sub_s);
+    U_E2_ADD : addsub_w generic map (w => 4) port map (A => E2_vec, B => "0001", SUB => '0', S => E2_add_s);
+    U_E2_SUB : addsub_w generic map (w => 4) port map (A => E2_vec, B => "0001", SUB => '1', S => E2_sub_s);
+    U_E3_ADD : addsub_w generic map (w => 4) port map (A => E3_vec, B => "0001", SUB => '0', S => E3_add_s);
+    U_E3_SUB : addsub_w generic map (w => 4) port map (A => E3_vec, B => "0001", SUB => '1', S => E3_sub_s);
+    U_E4_ADD : addsub_w generic map (w => 4) port map (A => E4_vec, B => "0001", SUB => '0', S => E4_add_s);
+    U_E4_SUB : addsub_w generic map (w => 4) port map (A => E4_vec, B => "0001", SUB => '1', S => E4_sub_s);
+    U_E5_ADD : addsub_w generic map (w => 4) port map (A => E5_vec, B => "0001", SUB => '0', S => E5_add_s);
+    U_E5_SUB : addsub_w generic map (w => 4) port map (A => E5_vec, B => "0001", SUB => '1', S => E5_sub_s);
+    U_E6_ADD : addsub_w generic map (w => 4) port map (A => E6_vec, B => "0001", SUB => '0', S => E6_add_s);
+    U_E6_SUB : addsub_w generic map (w => 4) port map (A => E6_vec, B => "0001", SUB => '1', S => E6_sub_s);
 
-	 U_E1_ADD : addsub_w generic map (w => 4) port map (A => E1_vec, B =>"0001", SUB => mux_E1, S => E1_add_s);
-	 U_E2_ADD : addsub_w generic map (w => 4) port map (A => E2_vec, B =>"0001", SUB => mux_E2, S => E2_add_s);
-	 U_E3_ADD : addsub_w generic map (w => 4) port map (A => E3_vec, B =>"0001", SUB => mux_E3, S => E3_add_s);
-	 U_E4_ADD : addsub_w generic map (w => 4) port map (A => E4_vec, B =>"0001", SUB => mux_E4, S => E4_add_s);
-	 U_E5_ADD : addsub_w generic map (w => 4) port map (A => E5_vec, B =>"0001", SUB => mux_E5, S => E5_add_s);
-	 U_E6_ADD : addsub_w generic map (w => 4) port map (A => E6_vec, B =>"0001", SUB => mux_E6, S => E6_add_s);
-	 
     B_minus1 <= B_sub_s(3 downto 0) when B_reg_vec /= "0000" else "0000";
     Q_minus1 <= Q_sub_s(3 downto 0) when Q_reg_vec /= "0000" else "0000";
     C_minus1 <= C_sub_s(3 downto 0) when C_reg_vec /= "0000" else "0000";
@@ -130,18 +123,18 @@ begin
     L_minus1 <= L_sub_s(5 downto 0) when L_reg_vec /= "000000" else "000000";
     V_minus1 <= V_sub_s(6 downto 0) when V_reg_vec /= "0000000" else "0000000";
 
-    --E1_plus1 <= E1_add_s(3 downto 0);
-    --E1_minus1 <= E1_sub_s(3 downto 0);
---    E2_plus1 <= E2_add_s(3 downto 0);
---    E2_minus1 <= E2_sub_s(3 downto 0);
---    E3_plus1 <= E3_add_s(3 downto 0);
---    E3_minus1 <= E3_sub_s(3 downto 0);
---    E4_plus1 <= E4_add_s(3 downto 0);
---    E4_minus1 <= E4_sub_s(3 downto 0);
---    E5_plus1 <= E5_add_s(3 downto 0);
---    E5_minus1 <= E5_sub_s(3 downto 0);
---    E6_plus1 <= E6_add_s(3 downto 0);
---    E6_minus1 <= E6_sub_s(3 downto 0);
+    E1_plus1 <= E1_add_s(3 downto 0);
+    E1_minus1 <= E1_sub_s(3 downto 0);
+    E2_plus1 <= E2_add_s(3 downto 0);
+    E2_minus1 <= E2_sub_s(3 downto 0);
+    E3_plus1 <= E3_add_s(3 downto 0);
+    E3_minus1 <= E3_sub_s(3 downto 0);
+    E4_plus1 <= E4_add_s(3 downto 0);
+    E4_minus1 <= E4_sub_s(3 downto 0);
+    E5_plus1 <= E5_add_s(3 downto 0);
+    E5_minus1 <= E5_sub_s(3 downto 0);
+    E6_plus1 <= E6_add_s(3 downto 0);
+    E6_minus1 <= E6_sub_s(3 downto 0);
 
     U_MUX_B : mux_2x1 generic map (W => 4) port map (D0 => sw_B, D1 => B_minus1, SEL => mux_B, MX_OUT => B_mux_out);
     U_MUX_Q : mux_2x1 generic map (W => 4) port map (D0 => sw_Q, D1 => Q_minus1, SEL => mux_Q, MX_OUT => Q_mux_out);
@@ -150,12 +143,12 @@ begin
     U_MUX_L : mux_2x1 generic map (W => 6) port map (D0 => sw_L, D1 => L_minus1, SEL => mux_L, MX_OUT => L_mux_out);
     U_MUX_V : mux_2x1 generic map (W => 7) port map (D0 => sw_V, D1 => V_minus1, SEL => mux_V, MX_OUT => V_mux_out);
 
-    --U_MUX_E1 : mux_2x1 generic map (W => 4) port map (D0 => E1_minus1, D1 => E1_plus1, SEL => mux_E1, MX_OUT => E1_mux_out);
-    --U_MUX_E2 : mux_2x1 generic map (W => 4) port map (D0 => E2_minus1, D1 => E2_plus1, SEL => mux_E2, MX_OUT => E2_mux_out);
---    U_MUX_E3 : mux_2x1 generic map (W => 4) port map (D0 => E3_minus1, D1 => E3_plus1, SEL => mux_E3, MX_OUT => E3_mux_out);
---    U_MUX_E4 : mux_2x1 generic map (W => 4) port map (D0 => E4_minus1, D1 => E4_plus1, SEL => mux_E4, MX_OUT => E4_mux_out);
---    U_MUX_E5 : mux_2x1 generic map (W => 4) port map (D0 => E5_minus1, D1 => E5_plus1, SEL => mux_E5, MX_OUT => E5_mux_out);
---    U_MUX_E6 : mux_2x1 generic map (W => 4) port map (D0 => E6_minus1, D1 => E6_plus1, SEL => mux_E6, MX_OUT => E6_mux_out);
+    U_MUX_E1 : mux_2x1 generic map (W => 4) port map (D0 => E1_minus1, D1 => E1_plus1, SEL => mux_E1, MX_OUT => E1_mux_out);
+    U_MUX_E2 : mux_2x1 generic map (W => 4) port map (D0 => E2_minus1, D1 => E2_plus1, SEL => mux_E2, MX_OUT => E2_mux_out);
+    U_MUX_E3 : mux_2x1 generic map (W => 4) port map (D0 => E3_minus1, D1 => E3_plus1, SEL => mux_E3, MX_OUT => E3_mux_out);
+    U_MUX_E4 : mux_2x1 generic map (W => 4) port map (D0 => E4_minus1, D1 => E4_plus1, SEL => mux_E4, MX_OUT => E4_mux_out);
+    U_MUX_E5 : mux_2x1 generic map (W => 4) port map (D0 => E5_minus1, D1 => E5_plus1, SEL => mux_E5, MX_OUT => E5_mux_out);
+    U_MUX_E6 : mux_2x1 generic map (W => 4) port map (D0 => E6_minus1, D1 => E6_plus1, SEL => mux_E6, MX_OUT => E6_mux_out);
 
     U_REG_B : reg_w generic map (W => 4) port map (REG_IN => B_mux_out, CLK => clk, LD => ld_B, CLR => clr_B, REG_OUT => B_reg_vec);
     U_REG_Q : reg_w generic map (W => 4) port map (REG_IN => Q_mux_out, CLK => clk, LD => ld_Q, CLR => clr_Q, REG_OUT => Q_reg_vec);
@@ -164,19 +157,12 @@ begin
     U_REG_L : reg_w generic map (W => 6) port map (REG_IN => L_mux_out, CLK => clk, LD => ld_L, CLR => clr_L, REG_OUT => L_reg_vec);
     U_REG_V : reg_w generic map (W => 7) port map (REG_IN => V_mux_out, CLK => clk, LD => ld_V, CLR => clr_V, REG_OUT => V_reg_vec);
 
-	 U_REG_E1 : reg_w generic map (W => 4) port map (REG_IN =>E1_add_s(3 downto 0), CLK => clk, LD => ld_E1, CLR => clr_E1, REG_OUT => E1_vec);
-	 U_REG_E2 : reg_w generic map (W => 4) port map (REG_IN =>E2_add_s(3 downto 0), CLK => clk, LD => ld_E2, CLR => clr_E2, REG_OUT => E2_vec);
-	 U_REG_E3 : reg_w generic map (W => 4) port map (REG_IN =>E3_add_s(3 downto 0), CLK => clk, LD => ld_E3, CLR => clr_E3, REG_OUT => E3_vec);
-	 U_REG_E4 : reg_w generic map (W => 4) port map (REG_IN =>E4_add_s(3 downto 0), CLK => clk, LD => ld_E4, CLR => clr_E4, REG_OUT => E4_vec);
-	 U_REG_E5 : reg_w generic map (W => 4) port map (REG_IN =>E5_add_s(3 downto 0), CLK => clk, LD => ld_E5, CLR => clr_E5, REG_OUT => E5_vec);
-	 U_REG_E6 : reg_w generic map (W => 4) port map (REG_IN =>E6_add_s(3 downto 0), CLK => clk, LD => ld_E6, CLR => clr_E6, REG_OUT => E6_vec);
-	 
-    --U_REG_E1 : reg_w generic map (W => 4) port map (REG_IN => E1_mux_out, CLK => clk, LD => ld_E1, CLR => clr_E1, REG_OUT => E1_vec);
-    --U_REG_E2 : reg_w generic map (W => 4) port map (REG_IN => E2_mux_out, CLK => clk, LD => ld_E2, CLR => clr_E2, REG_OUT => E2_vec);
---    U_REG_E3 : reg_w generic map (W => 4) port map (REG_IN => E3_mux_out, CLK => clk, LD => ld_E3, CLR => clr_E3, REG_OUT => E3_vec);
---    U_REG_E4 : reg_w generic map (W => 4) port map (REG_IN => E4_mux_out, CLK => clk, LD => ld_E4, CLR => clr_E4, REG_OUT => E4_vec);
---    U_REG_E5 : reg_w generic map (W => 4) port map (REG_IN => E5_mux_out, CLK => clk, LD => ld_E5, CLR => clr_E5, REG_OUT => E5_vec);
---    U_REG_E6 : reg_w generic map (W => 4) port map (REG_IN => E6_mux_out, CLK => clk, LD => ld_E6, CLR => clr_E6, REG_OUT => E6_vec);
+    U_REG_E1 : reg_w generic map (W => 4) port map (REG_IN => E1_mux_out, CLK => clk, LD => ld_E1, CLR => clr_E1, REG_OUT => E1_vec);
+    U_REG_E2 : reg_w generic map (W => 4) port map (REG_IN => E2_mux_out, CLK => clk, LD => ld_E2, CLR => clr_E2, REG_OUT => E2_vec);
+    U_REG_E3 : reg_w generic map (W => 4) port map (REG_IN => E3_mux_out, CLK => clk, LD => ld_E3, CLR => clr_E3, REG_OUT => E3_vec);
+    U_REG_E4 : reg_w generic map (W => 4) port map (REG_IN => E4_mux_out, CLK => clk, LD => ld_E4, CLR => clr_E4, REG_OUT => E4_vec);
+    U_REG_E5 : reg_w generic map (W => 4) port map (REG_IN => E5_mux_out, CLK => clk, LD => ld_E5, CLR => clr_E5, REG_OUT => E5_vec);
+    U_REG_E6 : reg_w generic map (W => 4) port map (REG_IN => E6_mux_out, CLK => clk, LD => ld_E6, CLR => clr_E6, REG_OUT => E6_vec);
 
     B_gt_0 <= '1' when unsigned(B_reg_vec) > 0 else '0';
     Q_gt_0 <= '1' when unsigned(Q_reg_vec) > 0 else '0';

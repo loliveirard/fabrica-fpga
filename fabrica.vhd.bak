@@ -5,16 +5,10 @@ use std.textio.all;
 
 entity fabrica is
     port (
-        clk50         : in  std_logic;
+        clk         : in  std_logic;
         btn_edge    : in  std_logic;
         switches_in : in  std_logic_vector(6 downto 0);
-        bcd1, bcd2, bcd3, bcd4, bcd5, bcd6 : out std_logic_vector(6 downto 0);
-		  -- E1_reg, E2_reg, E3_reg, E4_reg, E5_reg, E6_reg : out std_logic_vector(3 downto 0);
-		  -- B_reg, C_reg, Q_reg : out std_logic_vector(3 downto 0);
-		  -- L_reg, P_reg : out std_logic_vector(5 downto 0);
-		  -- V_reg : out std_logic_vector(6 downto 0);
-		  led_B_out, led_V_out, led_P_out, led_Q_out, led_L_out, led_C_out : out std_logic;
-		  reset_n_fab : in std_logic
+        bcd1, bcd2, bcd3, bcd4, bcd5, bcd6 : out std_logic_vector(6 downto 0)
     );
 end entity fabrica;
 
@@ -46,23 +40,13 @@ architecture rtl of fabrica is
     signal V_reg_out_sig : std_logic_vector(6 downto 0);
 
     signal B_gt_0_sig, Q_gt_0_sig, C_gt_0_sig, P_gt_3_sig, L_gt_3_sig, V_gt_7_sig : std_logic;
-	 signal btn_sinc: std_logic;
-	 signal clk : std_logic;
 
 begin
-
-	u_button : entity work.push_button
-	port map(
-		entrada 	=>btn_edge,
-		CLK 		=>clk,
-		Saida 	=>btn_sinc
-	);
 
     u_controladora : entity work.controladora
         port map (
             clk      => clk,
-            btn_edge => btn_sinc,
-				reset_n => reset_n_fab,
+            btn_edge => btn_edge,
             Bgt0 => Bgt0_sig,
             Vgt7 => Vgt7_sig,
             Cgt0 => Cgt0_sig,
@@ -81,13 +65,7 @@ begin
             ld_E4 => ld_E4_sig, clr_E4 => clr_E4_sig, mux_E4 => mux_E4_sig,
             ld_E5 => ld_E5_sig, clr_E5 => clr_E5_sig, mux_E5 => mux_E5_sig,
             ld_E6 => ld_E6_sig, clr_E6 => clr_E6_sig, mux_E6 => mux_E6_sig,
-            ld_DATA => ld_DATA_sig,
-				led_B => led_B_out,
-				led_Q => led_Q_out,
-				led_V => led_V_out,
-				led_L => led_L_out,
-				led_C => led_C_out,
-				led_P => led_P_out
+            ld_DATA => ld_DATA_sig
         );
 
     u_datapath : entity work.datapath
@@ -117,7 +95,7 @@ begin
             E3_out => E3_out_sig,
             E4_out => E4_out_sig,
             E5_out => E5_out_sig,
-            E6_out => E6_out_sig,		
+            E6_out => E6_out_sig,
             B_gt_0 => Bgt0_sig,
             Q_gt_0 => Qgt0_sig,
             P_gt_3 => Pgt3_sig,
@@ -131,14 +109,6 @@ begin
             bcd5_out => bcd5,
             bcd6_out => bcd6
         );
-		  
-		u_clock : entity work.DivisorClock 
-			port map(
-				CLOCK_50MHz => clk50,
-				reset => reset_n_fab,
-				CLOCK_1Hz => clk
-			);
-			
 
     process
         file report_file : text open append_mode is "report.txt";
